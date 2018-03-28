@@ -89,6 +89,8 @@ def follow_user(token, followerid):
         return False
     r.sadd("followers:" + str(userid), followerid)
     r.sadd("following:" + str(followerid), userid)
+    r.sadd('log:' + str(userid), "User " + str(get_username(userid)) + " Followed " + str(get_username(followerid)) + " at " + str(
+        time.asctime(time.localtime(time.time()))))
     return True
 
 
@@ -135,6 +137,9 @@ def add_post(token, body, retweet=False):
     userid = get_id_token(token)
     if userid == -1:
         return "Invalid Token"
+    if retweet:
+        r.sadd('log:' + str(userid), "User " + str(get_username(userid)) + " retweeted " + str(body) + " at " + str(
+            time.asctime(time.localtime(time.time()))))
     postid = r.incr("next_post_id")
 
     r.hmset("post:" + str(postid), {"user_id": str(userid), "time": time.time(),
@@ -161,6 +166,10 @@ def like_post(token, postid):
         return "Already Liked"
     r.hincrby('post:' + str(postid), 'likeCnt', 1)
     r.sadd('likes:' + str(postid), userid)
+    r.sadd('log:' + str(userid),
+           "User " + str(get_username(userid)) + " Liked " + str(get_post(postid)['body']) + " at " + str(
+               time.asctime(time.localtime(time.time()))))
+    return "Liked"
 
 
 def unlike_post(token, postid):
@@ -182,9 +191,9 @@ def add_retweet(token, postid):
 
 def hashtag_search(hashtag):
     r = redisLink()
-    dat: list = [key.decode('utf-8') for key in r.keys("*"+str(hashtag)+"*")]
+    dat: list = [key.decode('utf-8') for key in r.keys("*" + str(hashtag) + "*")]
     for d in dat:
-        if r.zscore('hashtags',d) is None:
+        if r.zscore('hashtags', d) is None:
             dat.remove(d)
     return dat
 
@@ -229,7 +238,7 @@ def get_all_following(token):
     userid = get_id_token(token)
     if userid == -1:
         return "Invalid Token"
-    return [int(key.decode('utf-8')) for key in r.smembers('following:'+str(userid))]
+    return [int(key.decode('utf-8')) for key in r.smembers('following:' + str(userid))]
 
 
 def get_posts_for_home(token):
@@ -241,6 +250,13 @@ def get_posts_for_home(token):
         posts.append(get_all_user_posts(u))
     return posts
 
+
+def get_logs(token):
+    r = redisLink()
+    userid = get_id_token(token)
+    if userid == -1:
+        return "Invalid Token"
+    return [key.decode('utf-8') for key in r.smembers('log:'+str(userid))]
 
 # def strElapsed(t):
 #     d = int(time.time() - float(t))
