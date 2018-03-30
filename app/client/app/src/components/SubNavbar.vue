@@ -3,6 +3,7 @@
     <ul>
       <router-link tag="li" activeClass='is-active' :to="{ path: 'one'}"><a>Page One</a></router-link>
       <router-link tag="li" activeClass='is-active' :to="{ path: 'two'}"><a>Page Two</a></router-link>
+      <router-link tag="li" activeClass='is-active' :to="{ path: 'three'}"><a>Page Three</a></router-link>
     </ul>
   </nav>
 </template>

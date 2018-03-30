@@ -7,32 +7,41 @@ import SubNavbar from './components/SubNavbar'
 import PageOne from './views/PageOne'
 import PageTwo from './views/PageTwo'
 import Login from './views/Login'
+import Tweet from './components/Tweet'
 
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      components: {
-        main: Login
-      }
-    },
-    {
-      path: '/one',
-      components: {
-        navbar: Navbar,
-        subnavbar: SubNavbar,
-        main: PageOne
-      }
-    },
-    {
-      path: '/two',
-      components: {
-        navbar: Navbar,
-        subnavbar: SubNavbar,
-        main: PageTwo
-      }
-    }
-  ]
+    routes: [
+        {
+            path: '/',
+            components: {
+                main: Login
+            }
+        },
+        {
+            path: '/one',
+            components: {
+                navbar: Navbar,
+                subnavbar: SubNavbar,
+                main: PageOne
+            }
+        },
+        {
+            path: '/two',
+            components: {
+                navbar: Navbar,
+                subnavbar: SubNavbar,
+                main: PageTwo
+            }
+        },
+        {
+            path: '/three',
+            components: {
+                navbar: Navbar,
+                subnavbar: SubNavbar,
+                main: Tweet
+            }
+        }
+    ]
 })

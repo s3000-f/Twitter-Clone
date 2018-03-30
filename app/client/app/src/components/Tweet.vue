@@ -26,14 +26,12 @@
     </div>
 
 </template>
-
-
 <script>
   export default {
     name: 'tweet',
     data () {
       return {
-         tweet: {
+        tweet: {
           isRetweeted: true,
           user: 'Mohammad',
           orgUser: 'Database',
@@ -44,10 +42,7 @@
       }
     }
   }
-
 </script>
-
-
 <style>
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i,900');
 
@@ -129,6 +124,4 @@ p {
 .icon-like {
 
 }
-
-
 </style>

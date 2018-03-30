@@ -89,7 +89,7 @@ def follow_user(token, followerid):
         return False
     r.sadd("followers:" + str(userid), followerid)
     r.sadd("following:" + str(followerid), userid)
-    r.sadd('log:' + str(userid), "User " + str(get_username(userid)) + " Followed " + str(get_username(followerid)) + " at " + str(
+    r.sadd('log:' + str(userid), "User " + str(get_username(userid)) + " Followed " + str(get_username(followerid)) + " on " + str(
         time.asctime(time.localtime(time.time()))))
     return True
 
@@ -106,7 +106,7 @@ def unfollow_user(token, followerid):
 
 def get_username(userid):
     r = redisLink()
-    return r.hget("user:" + str(userid), "username")
+    return r.hget("user:" + str(userid), "username").decode('utf-8')
 
 
 def get_user_id(username):
@@ -138,7 +138,7 @@ def add_post(token, body, retweet=False):
     if userid == -1:
         return "Invalid Token"
     if retweet:
-        r.sadd('log:' + str(userid), "User " + str(get_username(userid)) + " retweeted " + str(body) + " at " + str(
+        r.sadd('log:' + str(userid), "User " + str(get_username(userid)) + " retweeted " + str(body) + " on " + str(
             time.asctime(time.localtime(time.time()))))
     postid = r.incr("next_post_id")
 
@@ -167,7 +167,7 @@ def like_post(token, postid):
     r.hincrby('post:' + str(postid), 'likeCnt', 1)
     r.sadd('likes:' + str(postid), userid)
     r.sadd('log:' + str(userid),
-           "User " + str(get_username(userid)) + " Liked " + str(get_post(postid)['body']) + " at " + str(
+           "User " + str(get_username(userid)) + " Liked " + str(get_post(postid)['body']) + " on " + str(
                time.asctime(time.localtime(time.time()))))
     return "Liked"
 
@@ -186,15 +186,15 @@ def unlike_post(token, postid):
 def add_retweet(token, postid):
     r = redisLink()
     post = get_post(postid)
-    add_post(token, post['body'], True)
+    return add_post(token, post['body'], True)
 
 
 def hashtag_search(hashtag):
     r = redisLink()
-    dat: list = [key.decode('utf-8') for key in r.keys("*" + str(hashtag) + "*")]
-    for d in dat:
-        if r.zscore('hashtags', d) is None:
-            dat.remove(d)
+    dat: list = []
+    for d in [key.decode('utf-8') for key in r.keys("*" + str(hashtag) + "*")]:
+        if r.zscore('hashtags', d):
+            dat.append(d)
     return dat
 
 
@@ -226,10 +226,13 @@ def get_post(postid):
 
 def get_all_user_posts(userid):
     r = redisLink()
-    pid = {key.decode('utf-8') for key in (r.smembers('userposts:' + str(userid))).items()}
+    pid = {key.decode('utf-8') for key in (r.smembers('userposts:' + str(userid)))}
     posts = []
     for i in pid:
-        posts.append(get_post(i))
+        p: dict = get_post(i)
+        if p:
+            p.update({'id': i})
+            posts.append(p)
     return posts
 
 
@@ -238,7 +241,9 @@ def get_all_following(token):
     userid = get_id_token(token)
     if userid == -1:
         return "Invalid Token"
-    return [int(key.decode('utf-8')) for key in r.smembers('following:' + str(userid))]
+    ret = [int(key.decode('utf-8')) for key in r.smembers('followers:' + str(userid))]
+    ret.append(userid)
+    return ret
 
 
 def get_posts_for_home(token):
@@ -258,6 +263,10 @@ def get_logs(token):
         return "Invalid Token"
     return [key.decode('utf-8') for key in r.smembers('log:'+str(userid))]
 
+
+def top_hashtags():
+    r = redisLink()
+    return dict({key.decode('utf-8'): int(value) for (key, value) in r.zrange(str('hashtags'), 0, 10, desc=True, withscores=True)})
 # def strElapsed(t):
 #     d = int(time.time() - float(t))
 #     if d < 60:
