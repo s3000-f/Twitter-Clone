@@ -7,6 +7,11 @@
     </div>
     <div class="level">
       <div class="level-item has-text-centered">
+        <login-component/>
+      </div>
+    </div>
+    <div class="level">
+      <div class="level-item has-text-centered">
         <router-link tag="a" :to="{ path: 'Home'}" class="button">Login</router-link>
       </div>
   </div>
@@ -14,9 +19,12 @@
 </template>
 
 <script>
-
+import LoginComponent from '../components/LoginComponent'
 export default {
   name: 'Login',
+  components: {
+    LoginComponent
+  },
   data () {
     return {
 

@@ -40,7 +40,7 @@
                   <i class="fa fa-envelope"></i>
                 </span>
                 <span class="icon is-small is-right">
-                  <i class="fa fa-warning"></i>
+                  <i class="fa fa-home"></i>
                 </span>
               </div>
               <p class="help is-danger">This email is invalid</p>
