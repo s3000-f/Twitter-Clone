@@ -43,6 +43,11 @@
 <script>
 import axios from 'axios'
 
+let ax = axios.create({
+  baseURL: 'http://127.0.0.1:5000/api/',
+  timeout: 5000,
+  headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+})
 export default {
   name: 'LoginComponent',
   data () {
@@ -53,27 +58,18 @@ export default {
   },
   methods: {
     login: function (u, p) {
-      if (!u || !p) {
-        console.log('empty input')
-        return
+      if (u && p) {
+        ax.post('login', {
+          username: u,
+          password: p
+        })
+          .then(function (response) {
+            console.log(response)
+          })
+          .catch(function (error) {
+            console.error(error)
+          })
       }
-      let ob = {
-        username: u,
-        password: p
-      }
-      console.log(ob)
-      axios({
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-
-        },
-        url: 'http://localhost:5000/api/login',
-        data: {
-          username: 'Fred',
-          password: 'Flintstone'
-        }
-      })
     }
   }
 }
