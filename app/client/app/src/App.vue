@@ -12,6 +12,7 @@
 
           <router-view name="main"></router-view>
 
+
         </div>
       </transition>
     </section>
@@ -23,6 +24,8 @@
 
 export default {
   name: '',
+  components: {
+  },
   computed: {
     isLoading () {
       return this.$store.state.isLoading

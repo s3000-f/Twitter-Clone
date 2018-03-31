@@ -7,7 +7,7 @@
     </div>
     <div class="level">
       <div class="level-item has-text-centered">
-        <router-link tag="a" :to="{ path: 'one'}" class="button">Login</router-link>
+        <router-link tag="a" :to="{ path: 'Home'}" class="button">Login</router-link>
       </div>
   </div>
 </section>

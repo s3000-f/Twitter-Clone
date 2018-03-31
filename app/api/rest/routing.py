@@ -168,7 +168,7 @@ class ResourceOne(BaseResource):
 
 @rest_resource
 class SecureResourceOne(SecureResource):
-    """ /api/resource/two """
+    """/api/resource/two"""
     endpoints = ['/resource/two/<string:resource_id>', '/te']
 
     def get(self, resource_id):

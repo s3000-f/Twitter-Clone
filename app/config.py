@@ -5,8 +5,8 @@ from app import app
 
 
 class Config(object):
-    DEBUG = False
-    TESTING = False
+    DEBUG = True
+    TESTING = True
     PRODUCTION = False
 
 

@@ -1,25 +1,25 @@
 <template>
     <div class="tweet-container">
-      <div class="retweet-data" v-if="tweet.isRetweeted">
-        <span class="icon-retweet-sm">↻ </span >
-        <span class="class="retweet-username>&nbsp;{{tweet.user}} Retweeted </span>
+      <div class="retweet-data" v-if="isRetweeted">
+        <i class="fas fa-retweet"></i>
+        <span class="retweet-username">&nbsp;{{user}} Retweeted </span>
       </div>
       <div class="tweet-data">
-        <span class="tweet-original-user">{{tweet.orgUser}}</span>
-        <span class="tweet-original-user-id">@{{tweet.orgUser}}</span>
-        <p class="tweet-text">{{tweet.text}}</p>
+        <span class="tweet-original-user">{{orgUser}}</span>
+        <span class="tweet-original-user-id">@{{orgUser}}</span>
+        <p class="tweet-text">{{text}}</p>
       </div>
       <div class="utility-bar">
           <!-- chize, yedune is likedbyUser ro pass bedim:?  -->
           <button class="m-button like-button">
-            <span class="icon-like">❤</span>
+            <i class="fas fa-heart"></i>
           </button>
-          <span class="number-of-like">{{tweet.numOfLikes}}</span>
+          <span class="number-of-like">{{numOfLikes}}</span>
           <!-- ba isRetweetedByUser property, toggle esho control konim:? -->
           <button class="m-button retweet-button">
-            <span class="icon-retweet-md">↻ </span>
+            <i class="fas fa-retweet"></i>
           </button>
-          <span class="number-of-retweet">{{tweet.numOfRetweet}}</span>
+          <span class="number-of-retweet">{{numOfRetweet}}</span>
           <div class="horizontal-line"></div>
 
       </div>
@@ -31,32 +31,26 @@
     name: 'tweet',
     data () {
       return {
-        tweet: {
-          isRetweeted: true,
-          user: 'Mohammad',
-          orgUser: 'Database',
-          text: ' Fuck goftim o \'Proje\' aghaz shod.',
-          numOfLikes: 2,
-          numOfRetweet: 1
-        }
+
       }
+    },
+    props: {
+      isRetweeted: Boolean,
+      user: String,
+      orgUser: String,
+      text: String,
+      numOfLikes: Number,
+      numOfRetweet: Number
     }
   }
 </script>
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i,900');
 
 * {
   font-family: Roboto, sans-serif;
 }
-@font-face {
-    font-family: iran-Sans;
-    src: url("../assets/iranSans.ttf") format("truetype");
-}
-@font-face {
-    font-family: iranian-Sans;
-    src: url("../assets/iranianSans.ttf") format("truetype");
-}
+
 
 .tweet-container {
   background-color: #fff;

@@ -14,14 +14,14 @@
             <div class="field">
               <label class="label">Name</label>
               <div class="control">
-                <input class="input" type="text" placeholder="Text input">
+                <input class="input" type="text" placeholder="nnnnn">
               </div>
             </div>
 
             <div class="field">
-              <label class="label">Username</label>
+              <label class="label">Usernameme</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input is-success" type="text" placeholder="Text input" value="bulma">
+                <input class="input is-success" type="text" placeholder="Text input" value="jjijo">
                 <span class="icon is-small is-left">
                   <i class="fa fa-user"></i>
                 </span>

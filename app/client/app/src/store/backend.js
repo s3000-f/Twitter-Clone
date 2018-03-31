@@ -1,3 +1,4 @@
+
 import axios from 'axios'
 
 
@@ -17,7 +18,7 @@ $backend.interceptors.response.use(function (response) {
 export default {
 
   fetchResourceOne () {
-    return $backend.get(`resource/one`)
+    return $backend.get(`https://www.getpostman.com/collections/165ecf0e3db7b7bc0d05`)
       .then(response => response.data)
   },
 

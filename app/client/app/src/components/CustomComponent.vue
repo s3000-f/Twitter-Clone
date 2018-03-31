@@ -9,7 +9,7 @@
       </header>
       <div class="card-content">
         <div class="content">
-          Content
+          Content kkk
           <div>{{ resource }}</div>
         </div>
       </div>
