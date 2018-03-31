@@ -33,7 +33,6 @@
           <span> Login </span>
         </button>
 
-      </div>
     </div>
 
 </template>
@@ -42,27 +41,27 @@
 
 <script>
 import axios from 'axios'
-
+import qs from 'qs'
 let ax = axios.create({
-  baseURL: 'http://127.0.0.1:5000/api/',
+  baseURL: 'http://localhost:5000/api/',
   timeout: 5000,
-  headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  headers: {'Content-type': 'application/x-www-form-urlencoded'}
 })
 export default {
   name: 'LoginComponent',
   data () {
     return {
-      username: '',
-      password: ''
+      username: 'sdfsadfad',
+      password: 'asdfsdaf'
     }
   },
   methods: {
-    login: function (u, p) {
-      if (u && p) {
-        ax.post('login', {
-          username: u,
-          password: p
-        })
+    login: function () {
+      if (this.username && this.password) {
+        ax.post('login',
+          qs.stringify({'username': this.username}) + '&' + qs.stringify({'password': this.password})
+
+        )
           .then(function (response) {
             console.log(response)
           })
