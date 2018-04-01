@@ -51,19 +51,38 @@ export default {
   name: 'LoginComponent',
   data () {
     return {
-      username: 'sas',
-      password: 'sdads'
+      username: '',
+      password: '',
+      wrongPasswordFlag: false,
+      wrongUserFlag: false,
+      alreadyLoggedinFlag: false
     }
   },
   methods: {
     login: function () {
       if (this.username && this.password) {
+      	this.$data.wrongUserFlag = false;
+      	this.$data.alreadyLoggedinFlag = false;
+      	this.$data.wrongPasswordFlag = false;
         ax.post('login',
           qs.stringify({'username': this.username}) + '&' + qs.stringify({'password': this.password})
 
         )
-          .then(function (response) {
-            console.log(response.data)
+          .then((response) => {
+          	console.log(response.data.ans);
+            if(response.data.ans.indexOf("Not Registered") !== -1){
+            	this.$data.wrongUserFlag = true
+            }
+            else if(response.data.ans.indexOf("Already Logged In") !== -1){
+            	this.$data.alreadyLoggedinFlag = true
+            }
+            else if(response.data.ans.indexOf("Wrong Password") !== -1){
+            	this.$data.wrongPasswordFlag = true
+            }
+            else {
+            	this.$parent.$parent.$data.token = response.data.ans;
+            	this.$router.push('home');
+            }
           })
           .catch(function (error) {
             console.error(error)
