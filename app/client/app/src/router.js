@@ -9,7 +9,7 @@ import Home from './views/Home'
 import PageOne from './views/PageOne'
 import PageTwo from './views/PageTwo'
 import Login from './views/Login'
-import Tweet from './components/Tweet'
+import Main from './views/Main.vue'
 import EmptyComp from './components/EmptyComp'
 
 Vue.use(Router)
@@ -19,7 +19,7 @@ export default new Router({
         {
             path: '/',
             components: {
-                main: Login
+                main: Main
             }
         },
         {

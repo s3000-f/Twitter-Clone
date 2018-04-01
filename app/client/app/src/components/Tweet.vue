@@ -1,25 +1,25 @@
 <template>
     <div class="tweet-container">
-      <div class="retweet-data" v-if="isRetweeted">
+      <div class="retweet-data" v-if="retweet">
         <i class="fas fa-retweet"></i>
-        <span class="retweet-username">&nbsp;{{user}} Retweeted </span>
+        <span class="retweet-username">&nbsp;{{user_id}} Retweeted </span>
       </div>
       <div class="tweet-data">
-        <span class="tweet-original-user">{{orgUser}}</span>
-        <span class="tweet-original-user-id">@{{orgUser}}</span>
-        <p class="tweet-text">{{text}}</p>
+        <span class="tweet-original-user">{{user_id}}</span>
+        <span class="tweet-original-user-id">@{{user_id}}</span>
+        <p class="tweet-text">{{body}}</p>
       </div>
       <div class="utility-bar">
           <!-- chize, yedune is likedbyUser ro pass bedim:?  -->
           <button class="m-button like-button">
             <i class="fas fa-heart"></i>
           </button>
-          <span class="number-of-like">{{numOfLikes}}</span>
+          <span class="number-of-like">{{likeCnt}}</span>
           <!-- ba isRetweetedByUser property, toggle esho control konim:? -->
           <button class="m-button retweet-button">
             <i class="fas fa-retweet"></i>
           </button>
-          <span class="number-of-retweet">{{numOfRetweet}}</span>
+          <span class="number-of-retweet">{{time}}</span>
           <div class="horizontal-line"></div>
 
       </div>
@@ -28,19 +28,18 @@
 </template>
 <script>
   export default {
-    name: 'tweet',
+    name: 'Tweet',
     data () {
       return {
 
       }
     },
     props: {
-      isRetweeted: Boolean,
-      user: String,
-      orgUser: String,
-      text: String,
-      numOfLikes: Number,
-      numOfRetweet: Number
+      retweet: String,
+      user_id: String,
+      time: String,
+      body: String,
+      likeCnt: String
     }
   }
 </script>
@@ -53,10 +52,12 @@
 
 
 .tweet-container {
-  background-color: #fff;
+  background-color: #ffffff;
 }
 p {
   margin-top: 10px;
+  padding-right: 20px;
+  white-space: pre-wrap;
 }
 
 .tweet-original-user {

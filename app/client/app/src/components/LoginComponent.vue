@@ -51,8 +51,8 @@ export default {
   name: 'LoginComponent',
   data () {
     return {
-      username: 'sdfsadfad',
-      password: 'asdfsdaf'
+      username: 'sas',
+      password: 'sdads'
     }
   },
   methods: {
@@ -63,7 +63,7 @@ export default {
 
         )
           .then(function (response) {
-            console.log(response)
+            console.log(response.data)
           })
           .catch(function (error) {
             console.error(error)

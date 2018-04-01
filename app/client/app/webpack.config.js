@@ -27,13 +27,13 @@ module.exports = {
         loader: 'css-loader!css!style!',
         exclude: /node_modules/
       },
-      {
+      /*{
         // Lint local *.vue files
         enforce: 'pre',
         test: /\.vue$/,
         loader: 'eslint-loader',
         exclude: /node_modules/
-      },
+      },*/
       {
         test: /\.js$/,
         loader: 'babel-loader',
