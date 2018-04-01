@@ -1,10 +1,11 @@
 <template>
   <nav class="tabs is-small">
     <ul>
-      <router-link tag="li" activeClass='is-active' :to="{ path: 'Home'}"><a>Home</a></router-link>
+      <router-link tag="li" activeClass='is-active' :to="{ path: 'home'}"><a>Home</a></router-link>
       <router-link tag="li" activeClass='is-active' :to="{ path: 'two'}"><a>Page Two</a></router-link>
       <router-link tag="li" activeClass='is-active' :to="{ path: 'three'}"><a>Page Three</a></router-link>
-      <li><a v-on:click="logout">Log Out</a></li>
+      <router-link tag="li" activeClass='is-active' :to="{ path: 'users'}"><a>Users</a></router-link>
+      <li class="is-left"><a v-on:click="logout">Log Out</a></li>
     </ul>
   </nav>
 </template>

@@ -43,9 +43,16 @@
       ax.post('showhome',
         qs.stringify({'token': this.$parent.$data.token})
       ).then( response => {
-	      this.$data.tweets = (response.data.ans[0]);
-	      this.$data.tweets.sort((a,b)=> {return ( parseFloat(b.time) - parseFloat(a.time))});
-	      console.log(this.$data.tweets);
+	      if(response.data.ans[0] !== 'I') {
+		      this.$data.tweets.push(response.data.ans[0]);
+		      this.$data.tweets.sort((a, b) => {
+			      return ( parseFloat(b.time) - parseFloat(a.time))
+		      });
+		      
+	      }
+        console.log(this.$data.tweets);
+      }).catch( (error) =>{
+      	console.error(error)
       })
     },
     components: {
