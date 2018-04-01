@@ -3,11 +3,13 @@
     <div >
       <new-tweet-component></new-tweet-component>
     </div>
-    <div  v-for="(tweet, key) in tweets">
+    <template v-if="hasTweet">
+      <div  v-for="(tweet, key) in tweets">
       <div >
         <tweet v-bind:key="key" v-bind="tweet"></tweet>
       </div>
     </div>
+    </template>
   </section>
   
 
@@ -43,14 +45,16 @@
       ax.post('showhome',
         qs.stringify({'token': this.$parent.$data.token})
       ).then( response => {
-	      if(response.data.ans[0] !== 'I') {
-		      this.$data.tweets.push(response.data.ans[0]);
+	      console.log(response.data.ans);
+	      console.log(response.data.ans[0]);
+	      if( response.data.ans[0] !== 'I') {
+	      	this.$data.tweets= response.data.ans[0];
 		      this.$data.tweets.sort((a, b) => {
 			      return ( parseFloat(b.time) - parseFloat(a.time))
 		      });
 		      
 	      }
-        console.log(this.$data.tweets);
+        console.log('home tweetsarr',this.$data.tweets.length);
       }).catch( (error) =>{
       	console.error(error)
       })
@@ -58,6 +62,11 @@
     components: {
       Tweet,
       NewTweetComponent
+    },
+    computed: {
+    	hasTweet: function () {
+        return this.$data.tweets.length > 0;
+	    }
     }
   }
 </script>

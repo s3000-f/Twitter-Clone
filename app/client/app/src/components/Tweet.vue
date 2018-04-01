@@ -1,25 +1,25 @@
 <template>
     <div class="tweet-container">
-      <div class="retweet-data" v-if="retweet">
+      <div class="retweet-data" v-if="retweetFlag">
         <i class="fas fa-retweet"></i>
-        <span class="retweet-username">&nbsp;{{user_id}} Retweeted </span>
+        <span class="retweet-username">&nbsp; </span>
       </div>
       <div class="tweet-data">
-        <span class="tweet-original-user">{{user_id}}</span>
+        <span class="tweet-original-user">{{username}}</span>
         <span class="tweet-original-user-id">@{{user_id}}</span>
         <p class="tweet-text">{{body}}</p>
       </div>
       <div class="utility-bar">
           <!-- chize, yedune is likedbyUser ro pass bedim:?  -->
-          <button class="m-button like-button">
+          <button class="m-button like-button" v-on:click="likeTweet(id)">
             <i class="fas fa-heart"></i>
           </button>
           <span class="number-of-like">{{likeCnt}}</span>
           <!-- ba isRetweetedByUser property, toggle esho control konim:? -->
-          <button class="m-button retweet-button">
+          <button class="m-button retweet-button" @click="retweetTweet(id)">
             <i class="fas fa-retweet"></i>
           </button>
-          <span class="number-of-retweet">{{time}}</span>
+          <p class="help has-text-right">{{postDate}}</p>
           <div class="horizontal-line"></div>
 
       </div>
@@ -27,19 +27,85 @@
 
 </template>
 <script>
+  import axios from 'axios'
+  import qs from 'qs'
+  let ax = axios.create({
+    baseURL: 'http://localhost:5000/api/',
+    timeout: 5000,
+    headers: {'Content-type': 'application/x-www-form-urlencoded'}
+  })
+  import TimeAgo from 'javascript-time-ago'
+  import en from 'javascript-time-ago/locale/en'
+  TimeAgo.locale(en)
+  const timeAgo = new TimeAgo('en-US')
   export default {
     name: 'Tweet',
     data () {
       return {
-
       }
     },
     props: {
       retweet: String,
       user_id: String,
+      username: String,
       time: String,
       body: String,
-      likeCnt: String
+      likeCnt: String,
+      id: String
+    },
+    computed: {
+    	retweetFlag: function () {
+        return this.$props.retweet === 'True';
+	    },
+      postDate: function () {
+        return timeAgo.format(new Date(parseFloat(this.$props.time) * 1000))
+        
+      },
+    },
+    methods: {
+    	likeTweet: function (postid) {
+        ax.post('liketweet',
+           qs.stringify({'token': this.$parent.$parent.$data.token}) + '&' +  qs.stringify({'postid': postid})
+        ).then( response => {
+        	if (response.data.ans.indexOf('Already Liked') !== -1)
+          {
+          	alert('you alredy liked this post')
+          }
+          else if (response.data.ans.indexOf('Liked') !== -1)
+          {
+            ax.post('showhome',
+                      qs.stringify({'token': this.$parent.$parent.$data.token})
+                    ).then( response => {
+                      this.$parent.$data.tweets = (response.data.ans[0]);
+                      this.$parent.$data.tweets.sort((a,b)=> {return ( parseFloat(b.time) - parseFloat(a.time))});
+                      console.log(this.$parent.$data.tweets);
+                    }).catch(function (error) {
+                      	console.error(error)
+                      })
+          }
+        }).catch(e => {console.error(e)})
+	    },
+      retweetTweet: function (postid) {
+        ax.post('retweet',
+           qs.stringify({'token': this.$parent.$parent.$data.token}) + '&' +  qs.stringify({'postid': postid})
+        ).then( response => {
+          if (response.data.ans.indexOf('Post Added') !== -1)
+          {
+            ax.post('showhome',
+                      qs.stringify({'token': this.$parent.$parent.$data.token})
+                    ).then( response => {
+                      this.$parent.$data.tweets = (response.data.ans[0]);
+                      this.$parent.$data.tweets.sort((a,b)=> {return ( parseFloat(b.time) - parseFloat(a.time))});
+                      console.log(this.$parent.$data.tweets);
+                    }).catch(function (error) {
+                      	console.error(error)
+                      })
+          }
+        }).catch(e => {console.error(e)})
+	    }
+    },
+    created: function () {
+      this.$data.likeCount = parseInt(this.$props.likeCnt);
     }
   }
 </script>
@@ -53,6 +119,7 @@
 
 .tweet-container {
   background-color: #ffffff;
+  padding-top: 10px;
 }
 p {
   margin-top: 10px;
@@ -89,7 +156,7 @@ p {
 .tweet-text {
   font-weight: 500;
   background-color : inherit;
-
+  margin-bottom: 20px;
 }
 
 .m-button {

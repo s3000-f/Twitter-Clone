@@ -8,8 +8,8 @@
       </div>
         <div class="level-right">
           <div class="level-item">
-            <button class="button follow-button">Follow</button>
-            <button class="button unfollow-button">Unfollow</button>
+            <button class="button follow-button" @click="follow">Follow</button>
+            <button class="button unfollow-button" @click="unfollow">Unfollow</button>
           </div>
         </div>
       
@@ -23,6 +23,13 @@
 
 
 <script>
+  import axios from 'axios'
+  import qs from 'qs'
+  let ax = axios.create({
+    baseURL: 'http://localhost:5000/api/',
+    timeout: 5000,
+    headers: {'Content-type': 'application/x-www-form-urlencoded'}
+  })
   export default {
   	name: 'UserCard',
     data () {
@@ -40,6 +47,44 @@
   			type: Number,
         default: 47
       }
+    },
+    methods: {
+  		follow: function () {
+        ax.post('follow',
+            qs.stringify({'token': this.$parent.$parent.$data.token}) + '&' + qs.stringify({'followingUsername': this.$props.id})
+          )
+          .then(response =>{
+	          console.log(response.data.ans);
+	          if(response.data.ans){
+          		alert('User Followed Sucessfuly.');
+            }
+            else {
+	          	alert('You are not Logged in');
+	          	this.$router.push('/');
+            }
+          })
+          .catch(e => {
+          	console.error(e);
+        })
+		  },
+      unfollow: function () {
+        ax.post('unfollow',
+            qs.stringify({'token': this.$parent.$parent.$data.token}) + '&' + qs.stringify({'followingUsername': this.$props.id})
+          )
+          .then(response =>{
+	          console.log(response.data.ans);
+	          if(response.data.ans){
+          		alert('User Unfollowed Sucessfuly.');
+            }
+            else {
+	          	alert('You are not Logged in');
+	          	this.$router.push('/');
+            }
+          })
+          .catch(e => {
+          	console.error(e);
+        })
+		  }
     }
   }
 </script>
@@ -52,5 +97,11 @@
   }
   .horizontal-line {
   border: 0.5px solid #ddd;
-}
+  }
+  .unfollow-button:hover {
+    background-color: dodgerblue;
+  }
+  .follow-button:hover {
+    background-color: dodgerblue;
+  }
 </style>

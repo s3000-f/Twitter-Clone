@@ -12,6 +12,7 @@ import Login from './views/Login'
 import Main from './views/Main.vue'
 import EmptyComp from './components/EmptyComp'
 import Users from './views/Users.vue'
+import Search from './views/Search.vue'
 
 Vue.use(Router)
 
@@ -20,6 +21,7 @@ export default new Router({
         {
             path: '/',
             components: {
+                navbar: Navbar,
                 main: Main
             }
         },
@@ -61,6 +63,13 @@ export default new Router({
           navbar: Navbar,
           subnavbar: SubNavbar,
           main: Users
+        }
+      },
+      {
+        path: '/search',
+        components: {
+          navbar: Navbar,
+          main: Search
         }
       }
     ]

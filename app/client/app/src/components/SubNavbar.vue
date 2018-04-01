@@ -1,13 +1,15 @@
 <template>
-  <nav class="tabs is-small">
-    <ul>
-      <router-link tag="li" activeClass='is-active' :to="{ path: 'home'}"><a>Home</a></router-link>
-      <router-link tag="li" activeClass='is-active' :to="{ path: 'two'}"><a>Page Two</a></router-link>
-      <router-link tag="li" activeClass='is-active' :to="{ path: 'three'}"><a>Page Three</a></router-link>
-      <router-link tag="li" activeClass='is-active' :to="{ path: 'users'}"><a>Users</a></router-link>
-      <li class="is-left"><a v-on:click="logout">Log Out</a></li>
-    </ul>
+  <nav>
+    <nav class="tabs is-small">
+      <ul>
+        <router-link tag="li" activeClass='is-active' :to="{ path: 'home'}"><a>Home</a></router-link>
+        <router-link tag="li" activeClass='is-active' :to="{ path: 'users'}"><a>Users</a></router-link>
+        <router-link tag="li" activeClass='is-active' :to="{ path: 'log'}"><a>Show Log</a></router-link>
+      </ul>
+    </nav>
   </nav>
+  
+  
 </template>
 
 <script>
@@ -29,7 +31,7 @@ export default {
 	      if (response.data.ans.indexOf('User Not Logged-in') !== -1)
         {
         	alert("USER IS NOT LOGGED IN")
-         
+          this.$router.push('/')
         }
         else {
 		      console.log('user', this.$parent.$data.token, 'has logged out');

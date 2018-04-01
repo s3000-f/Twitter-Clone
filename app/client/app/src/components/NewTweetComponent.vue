@@ -47,30 +47,30 @@
           console.log(this.$parent.$data.tweets);
           ax.post('newtweet',
               qs.stringify({'token': this.$parent.$parent.$data.token}) + '&' + qs.stringify({'body': this.text})
-    
             )
-              .then( (response) => {
-	              console.log(response.data.ans);
-	              if (response.data.ans.indexOf('Post Added') !== -1)
-                {
-                    ax.post('showhome',
-                      qs.stringify({'token': this.$parent.$parent.$data.token})
-                    ).then( response => {
-                      this.$parent.$data.tweets = (response.data.ans[0]);
-                      this.$parent.$data.tweets.sort((a,b)=> {return ( parseFloat(b.time) - parseFloat(a.time))});
-                      console.log(this.$parent.$data.tweets);
-                    }).catch(function (error) {
-                      	console.error(error)
-                      })
-                }}).catch(function (error) {
-                console.error(error)
+            .then( (response) => {
+              console.log(response.data.ans);
+              if (response.data.ans.indexOf('Post Added') !== -1)
+              {
+                ax.post('showhome',
+                  qs.stringify({'token': this.$parent.$parent.$data.token})
+                ).then( response => {
+                  this.$parent.$data.tweets = (response.data.ans[0]);
+                  this.$parent.$data.tweets.sort((a,b)=> {return ( parseFloat(b.time) - parseFloat(a.time))});
+                  console.log(this.$parent.$data.tweets);
+                }).catch(function (error) {
+                  console.error(error)
                 })
+              }})
+            .catch(function (error) {
+                console.error(error)
+            })
         }
 		  }
     },
     computed: {
   	charsLeft: function () {
-      return 20 - this.text.length
+      return 250 - this.text.length
 	  },
 	  tooLong: function () {
       return this.charsLeft < 0;

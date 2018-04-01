@@ -69,7 +69,7 @@
               else {
 	            	this.$parent.$parent.$data.token = response.data.ans;
                 console.log(this.$parent.$parent.$data.token)
-                this.$router.push('Home')
+                this.$router.push('home')
               }
             })
             .catch(function (error) {

@@ -6,7 +6,7 @@
         <router-view name="subnavbar"></router-view>
     </nav>
 
-    <section class="section">
+    <section class="section columns">
       <transition name="fade">
         <div class="container">
 
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-//"47135d21aaeaedfd3e0f7442d86dad3d"
+//"2d6e52686c5f3defa86a883758e34701"
 export default {
   name: 'App',
   data () {
