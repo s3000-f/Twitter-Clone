@@ -21,9 +21,14 @@
 </template>
 
 <script>
-
+//"47135d21aaeaedfd3e0f7442d86dad3d"
 export default {
-  name: '',
+  name: 'App',
+  data () {
+  	return {
+  	  token: ''
+    }
+  },
   components: {
   },
   computed: {

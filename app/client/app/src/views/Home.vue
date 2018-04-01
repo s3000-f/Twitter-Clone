@@ -1,58 +1,65 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        Hello
-      </div>
-      <div class="col-md-6">
-        Hello
+  <section class="container">
+    <div >
+      <new-tweet-component></new-tweet-component>
+    </div>
+    <div  v-for="(tweet, key) in tweets">
+      <div >
+        <tweet v-bind:key="key" v-bind="tweet"></tweet>
       </div>
     </div>
-  </div>
-
+  </section>
+  
 
 </template>
 
 
 
 <script>
-import Tweet from '../components/Tweet'
-export default {
-  name: 'Home',
-  data () {
-    return {
-      tweets: [
-        {
-          isRetweeted: true,
-          user: 'M',
-          orgUser: 'DB',
-          text: 'fuck off!',
-          numOfLikes: 1,
-          numOfRetweet: 2
-        },
-        {
-          isRetweeted: false,
-          user: undefined,
-          orgUser: 'M',
-          text: 'fuck0 ON!',
-          numOfLikes: 1000,
-          numOfRetweet: 3
-        },
-        {
-          isRetweeted: true,
-          user: 'M',
-          orgUser: 'DB',
-          text: 'fuck off!',
-          numOfLikes: 1,
-          numOfRetweet: 2
-        }
-      ]
+  import NewTweetComponent from '../components/NewTweetComponent.vue'
+  import Tweet from '../components/Tweet'
+  import axios from 'axios'
+  import qs from 'qs'
+  let ax = axios.create({
+    baseURL: 'http://localhost:5000/api/',
+    timeout: 5000,
+    headers: {'Content-type': 'application/x-www-form-urlencoded'}
+  })
+  export default {
+    name: 'Home',
+    data () {
+      return {
+        tweets: []
+      }
+    },
+    created: function () {
+	    console.log('created');
+	    /*ax.post('newtweet' ,
+         qs.stringify({'token': this.$parent.$data.token}) + '&' + qs.stringify({'body': 'some fucking shit #not asrf #as #a #b #c #d #e \n' +
+	      '#f #asff #ojgb #KVJDLKA #112 #etg'})
+      ).then((response)=> {
+		    console.log(response.data.ans);
+	    })*/
+      ax.post('showhome',
+        qs.stringify({'token': this.$parent.$data.token})
+      ).then( response => {
+	      if(response.data.ans[0] !== 'I') {
+		      this.$data.tweets.push(response.data.ans[0]);
+		      this.$data.tweets.sort((a, b) => {
+			      return ( parseFloat(b.time) - parseFloat(a.time))
+		      });
+		      
+	      }
+        console.log(this.$data.tweets);
+      }).catch( (error) =>{
+      	console.error(error)
+      })
+    },
+    components: {
+      Tweet,
+      NewTweetComponent
     }
-  },
-  components: {
-    Tweet
   }
-}
 </script>
 
 

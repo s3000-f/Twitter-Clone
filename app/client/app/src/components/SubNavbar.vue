@@ -1,16 +1,43 @@
 <template>
   <nav class="tabs is-small">
     <ul>
-      <router-link tag="li" activeClass='is-active' :to="{ path: 'Home'}"><a>Home</a></router-link>
+      <router-link tag="li" activeClass='is-active' :to="{ path: 'home'}"><a>Home</a></router-link>
       <router-link tag="li" activeClass='is-active' :to="{ path: 'two'}"><a>Page Two</a></router-link>
       <router-link tag="li" activeClass='is-active' :to="{ path: 'three'}"><a>Page Three</a></router-link>
+      <router-link tag="li" activeClass='is-active' :to="{ path: 'users'}"><a>Users</a></router-link>
+      <li class="is-left"><a v-on:click="logout">Log Out</a></li>
     </ul>
   </nav>
 </template>
 
 <script>
+  import axios from 'axios'
+  import qs from 'qs'
+  let ax = axios.create({
+    baseURL: 'http://localhost:5000/api/',
+    timeout: 5000,
+    headers: {'Content-type': 'application/x-www-form-urlencoded'}
+  })
+  
 export default {
-  name: 'SubNavbar'
+  name: 'SubNavbar',
+  methods: {
+  	logout: function () {
+      ax.post('logout',
+        qs.stringify({'token': this.$parent.$data.token})//
+      ).then( response => {
+	      if (response.data.ans.indexOf('User Not Logged-in') !== -1)
+        {
+        	alert("USER IS NOT LOGGED IN")
+         
+        }
+        else {
+		      console.log('user', this.$parent.$data.token, 'has logged out');
+		      this.$router.push('/')
+	      }
+      })
+	  }
+  }
 }
 </script>
 

@@ -9,8 +9,9 @@ import Home from './views/Home'
 import PageOne from './views/PageOne'
 import PageTwo from './views/PageTwo'
 import Login from './views/Login'
-import Tweet from './components/Tweet'
+import Main from './views/Main.vue'
 import EmptyComp from './components/EmptyComp'
+import Users from './views/Users.vue'
 
 Vue.use(Router)
 
@@ -19,7 +20,7 @@ export default new Router({
         {
             path: '/',
             components: {
-                main: Login
+                main: Main
             }
         },
         {
@@ -46,13 +47,21 @@ export default new Router({
                 main:  EmptyComp
             }
         },
-        {
-            path: '/Home',
-            components: {
-              navbar: Navbar,
-              subnavbar: SubNavbar,
-              main: Home
-            }
+	    {
+		    path: '/home',
+		    components: {
+			    navbar: Navbar,
+			    subnavbar: SubNavbar,
+			    main: Home
+		    }
+	    },
+      {
+        path: '/users',
+        components: {
+          navbar: Navbar,
+          subnavbar: SubNavbar,
+          main: Users
         }
+      }
     ]
 })
