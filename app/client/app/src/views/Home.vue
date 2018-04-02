@@ -26,7 +26,24 @@
     baseURL: 'http://localhost:5000/api/',
     timeout: 5000,
     headers: {'Content-type': 'application/x-www-form-urlencoded'}
-  })
+  });
+  function makePostArray(ans) {
+  	let postArray = [];
+    for (let i = 0 ; i < ans.length ; i++)
+    {
+    	for (let j = 0 ; j < ans[i].length ; j++)
+      {
+      	postArray.push(ans[i][j]);
+      }
+    }
+    postArray.sort(
+    	(a, b) =>
+      {
+      	return ( parseFloat(b.time) - parseFloat(a.time))
+      }
+    );
+    return postArray;
+  }
   export default {
     name: 'Home',
     data () {
@@ -36,25 +53,16 @@
     },
     created: function () {
 	    console.log('created');
-	    /*ax.post('newtweet' ,
-         qs.stringify({'token': this.$parent.$data.token}) + '&' + qs.stringify({'body': 'some fucking shit #not asrf #as #a #b #c #d #e \n' +
-	      '#f #asff #ojgb #KVJDLKA #112 #etg'})
-      ).then((response)=> {
-		    console.log(response.data.ans);
-	    })*/
       ax.post('showhome',
         qs.stringify({'token': this.$parent.$data.token})
       ).then( response => {
 	      console.log(response.data.ans);
 	      console.log(response.data.ans[0]);
 	      if( response.data.ans[0] !== 'I') {
-	      	this.$data.tweets= response.data.ans[0];
-		      this.$data.tweets.sort((a, b) => {
-			      return ( parseFloat(b.time) - parseFloat(a.time))
-		      });
-		      
+	      	this.$data.tweets = makePostArray(response.data.ans);
 	      }
-        console.log('home tweetsarr',this.$data.tweets.length);
+        console.log('Home view: this.$data.tweets', this.$data.tweets);
+	      console.log('Home view: response.data.ans', response.data.ans);
       }).catch( (error) =>{
       	console.error(error)
       })

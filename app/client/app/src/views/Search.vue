@@ -67,11 +67,12 @@
   		return {
   			topHashtags: {},
         searchValue: '',
-        tweets: {}
+        tweets: []
       }
     },
     created: function () {
-      ax.post('tophashtags',)
+	    console.log('search view created');
+	    ax.post('tophashtags',)
         .then( response => {
 	      this.$data.topHashtags = response.data.ans;
 	        console.log(this.$data.topHashtags);

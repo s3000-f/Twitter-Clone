@@ -38,6 +38,23 @@
   import en from 'javascript-time-ago/locale/en'
   TimeAgo.locale(en)
   const timeAgo = new TimeAgo('en-US')
+  function makePostArray(ans) {
+  	let postArray = [];
+    for (let i = 0 ; i < ans.length ; i++)
+    {
+    	for (let j = 0 ; j < ans[i].length ; j++)
+      {
+      	postArray.push(ans[i][j]);
+      }
+    }
+    postArray.sort(
+    	(a, b) =>
+      {
+      	return ( parseFloat(b.time) - parseFloat(a.time))
+      }
+    );
+    return postArray;
+  }
   export default {
     name: 'Tweet',
     data () {
@@ -73,15 +90,31 @@
           }
           else if (response.data.ans.indexOf('Liked') !== -1)
           {
-            ax.post('showhome',
+	          console.log('Tweet Comp likeTweet, postid=', this.$props.id,' is Liked');
+	          if (this.$router.currentRoute.path.indexOf('/home') !== -1)
+            {
+            	ax.post('showhome',
                       qs.stringify({'token': this.$parent.$parent.$data.token})
                     ).then( response => {
-                      this.$parent.$data.tweets = (response.data.ans[0]);
-                      this.$parent.$data.tweets.sort((a,b)=> {return ( parseFloat(b.time) - parseFloat(a.time))});
-                      console.log(this.$parent.$data.tweets);
+                      this.$parent.$data.tweets = makePostArray(response.data.ans);
+                      console.log('Tweet Component retweetTweet this.$parent.$data.tweets= ', this.$parent.$data.tweets);
                     }).catch(function (error) {
                       	console.error(error)
                       })
+            }
+            else if (this.$router.currentRoute.path.indexOf('/search') !== -1)
+            {
+	            ax.post('hashtag', qs.stringify({'hashtag': this.$parent.$data.searchValue}))
+                .then( response => {
+	                this.$parent.$data.tweets = response.data.ans;
+	                this.$parent.$data.tweets.sort( (a,b)=> {
+	                	return ( parseFloat(b.time) - parseFloat(a.time));
+                  })
+                })
+                .catch( (error) =>{
+                	console.error(error)
+                })
+            }
           }
         }).catch(e => {console.error(e)})
 	    },
@@ -91,15 +124,30 @@
         ).then( response => {
           if (response.data.ans.indexOf('Post Added') !== -1)
           {
-            ax.post('showhome',
+            if (this.$router.currentRoute.path.indexOf('/home') !== -1)
+            {
+            	ax.post('showhome',
                       qs.stringify({'token': this.$parent.$parent.$data.token})
                     ).then( response => {
-                      this.$parent.$data.tweets = (response.data.ans[0]);
-                      this.$parent.$data.tweets.sort((a,b)=> {return ( parseFloat(b.time) - parseFloat(a.time))});
-                      console.log(this.$parent.$data.tweets);
+                      this.$parent.$data.tweets = makePostArray(response.data.ans);
+                      console.log('Tweet Component retweetTweet this.$parent.$data.tweets= ', this.$parent.$data.tweets);
                     }).catch(function (error) {
                       	console.error(error)
                       })
+            }
+            else if (this.$router.currentRoute.path.indexOf('/search') !== -1)
+            {
+            	ax.post('hashtag', qs.stringify({'hashtag': this.$parent.$data.searchValue}))
+                .then( response => {
+                	this.$parent.$data.tweets = response.data.ans;
+	                this.$parent.$data.tweets.sort( (a,b)=> {
+	                	return ( parseFloat(b.time) - parseFloat(a.time));
+                  })
+                })
+                .catch( (error) =>{
+                	console.error(error)
+                })
+            }
           }
         }).catch(e => {console.error(e)})
 	    }

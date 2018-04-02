@@ -32,6 +32,23 @@
     timeout: 5000,
     headers: {'Content-type': 'application/x-www-form-urlencoded'}
   })
+  function makePostArray(ans) {
+  	let postArray = [];
+    for (let i = 0 ; i < ans.length ; i++)
+    {
+    	for (let j = 0 ; j < ans[i].length ; j++)
+      {
+      	postArray.push(ans[i][j]);
+      }
+    }
+    postArray.sort(
+    	(a, b) =>
+      {
+      	return ( parseFloat(b.time) - parseFloat(a.time))
+      }
+    );
+    return postArray;
+  }
   
   export default {
   	name: 'NewTweetComponent',
@@ -43,21 +60,20 @@
     methods: {
   		newTweet: function () {
 			  if (this.text) {
-			  	console.log(this.text);
-          console.log(this.$parent.$data.tweets);
+			  	
           ax.post('newtweet',
               qs.stringify({'token': this.$parent.$parent.$data.token}) + '&' + qs.stringify({'body': this.text})
             )
             .then( (response) => {
-              console.log(response.data.ans);
               if (response.data.ans.indexOf('Post Added') !== -1)
               {
+	              
+	              this.$data.text = '';
                 ax.post('showhome',
                   qs.stringify({'token': this.$parent.$parent.$data.token})
                 ).then( response => {
-                  this.$parent.$data.tweets = (response.data.ans[0]);
-                  this.$parent.$data.tweets.sort((a,b)=> {return ( parseFloat(b.time) - parseFloat(a.time))});
-                  console.log(this.$parent.$data.tweets);
+                  this.$parent.$data.tweets = makePostArray(response.data.ans);
+                  
                 }).catch(function (error) {
                   console.error(error)
                 })
