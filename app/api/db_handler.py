@@ -223,7 +223,7 @@ def get_post(postid):
     p = {key.decode('utf-8'): value.decode('utf-8') for (key, value) in post.items()}
     username = get_username(p['user_id'])
     p.update({'username': username})
-    p.update({'id': postid})
+    p.update({'id': str(postid)})
     return p
 
 
