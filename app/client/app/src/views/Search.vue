@@ -37,11 +37,17 @@
             </a>
           </div>
         </div>
-          <div  v-for="(tweet, key) in tweets">
-            <div>
-              <tweet v-bind:key="key" v-bind="tweet"></tweet>
-            </div>
+        <div>
+          <div v-for="hashtag in suggestedHashtags">
+            <button class="button" v-on:click="search(hashtag)"> {{hashtag}}</button>
           </div>
+        </div>
+        
+        <div  v-for="(tweet, key) in tweets">
+          <div>
+            <tweet v-bind:key="key" v-bind="tweet"></tweet>
+          </div>
+        </div>
       </div>
       
     </div>
@@ -67,6 +73,7 @@
   		return {
   			topHashtags: {},
         searchValue: '',
+        suggestedHashtags: [],
         tweets: []
       }
     },
@@ -83,6 +90,7 @@
     },
     methods: {
   		search: function (v) {
+  			this.$data.suggestedHashtags = [];
         ax.post('hashtag', qs.stringify({'hashtag': v}) )
         .then( response => {
 	        this.$data.tweets = response.data.ans;
@@ -96,6 +104,26 @@
         .catch( (error) =>{
       	console.error(error)
         })
+		  },
+      searchSuggested: _.debounce(
+      	function (s) {
+        ax.post('searchhashtags', qs.stringify({'hashtag': s}))
+          .then((response) => {
+        	  this.$data.suggestedHashtags = response.data.ans;
+          })
+          .catch((er) => {
+        	  console.error(er);
+          })
+        },
+        500
+      )
+      
+    },
+    watch: {
+  		searchValue: function (newSearchValue, oldSearchValue) {
+  			this.$data.suggestedHashtags = ['Waiting for you to stop typing...']
+  			this.searchSuggested(newSearchValue);
+			  
 		  }
     }
   }
