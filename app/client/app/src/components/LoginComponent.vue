@@ -28,7 +28,7 @@
       </div>
         <button v-on:click="login(username, password)" class="button is-link">
           <span class="icon is-small">
-          <i class="fa fa-sign-in"></i>
+          <i class="fas fa-sign-in-alt"></i>
           </span>
           <span> Login </span>
         </button>
